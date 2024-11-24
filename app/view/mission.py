@@ -2,7 +2,7 @@ from fastapi.routing import APIRouter
 
 from app.dependency import DB
 from app.model import Mission, Target
-from app.model import Targets # validation pydantic model 
+from app.model import Targets, UpdatedTargets # validation pydantic model 
 
 router = APIRouter()
 
@@ -24,7 +24,7 @@ def assign_cat(id: int, cat_id: int, db: DB):
     ...
     
 @router.put('/{id}')
-def update_targets(id: int, targets: Targets, db: DB):
+def update_targets(id: int, targets: UpdatedTargets, db: DB):
     ...
 
 @router.post('/')
