@@ -12,8 +12,14 @@ class Cat(Base):
     __tablename__ = 'cat'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     
-    
+    name: Mapped[str]= mapped_column()
+    years_of_experience: Mapped[float] = mapped_column(default=0)
+    breed: Mapped[str]
+    salary: Mapped[float]
     mission: Mapped[list['Mission']] = relationship(back_populates='cat')
+    
+    # without data validation yet, we assume endpoint's validation is correct.
+    # we may add later ValueError in validation, and handle in fastapi
     
     
 
