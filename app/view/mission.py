@@ -28,5 +28,5 @@ def update_targets(id: int, targets: Targets, db: DB):
     ...
 
 @router.post('/')
-def new_mission():
+def new_mission(targets: Targets, db: DB):
     ...
