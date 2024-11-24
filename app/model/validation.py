@@ -1,7 +1,8 @@
 from fastapi import Depends
 from pydantic import BaseModel, RootModel, Field, field_validator
+from pydantic import Field
 from annotated_types import Len, Ge
-from typing import List, Annotated
+from typing import List, Annotated, Optional
 
 from app.const import CAT_BREED_API
 
@@ -15,6 +16,13 @@ class UpdatedTarget(BaseModel):
     notes: str = ""
     complete: bool = False
     
+class Mission(BaseModel):
+    id: int
+    cat: Optional['Cat']
+    targets: 'UpdatedTargets' = Field(default_factory=list)
+    complete: bool
+
+
 
 class Targets(RootModel):
     root: Annotated[List[Target], Len(1, 3)]

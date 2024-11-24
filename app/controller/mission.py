@@ -18,3 +18,30 @@ class MissionController:
             self.db.commit()
         
     
+    def get_all(self):
+        return self.db.query(Mission).all()
+    
+    
+    def get(self, id):
+        mission = self.db.query(Mission).filter(Mission.id==id).one_or_none()
+        if not mission:
+            raise ValueError(f"Mission with id: {id} does not exists")
+        return mission
+    
+    
+    
+    # def remove(self, id: int):
+    #     cat = self.db.query(Cat).filter(Cat.id==id).one_or_none()
+    #     if not cat:
+    #         raise ValueError(f"Cat with id: {id} does not exists")
+    #     self.db.delete(cat)
+    #     self.db.commit()
+
+        
+        
+    # def set_salary(self, id: int, salary: Salary):
+    #     count = self.db.query(Cat).filter(Cat.id==id).update({Cat.salary: salary})
+    #     self.db.commit()
+    #     if not count:
+    #         raise ValueError(f"Cat with id: {id} does not exists")
+        
