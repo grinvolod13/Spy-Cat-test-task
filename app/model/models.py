@@ -38,6 +38,8 @@ class Target(Base):
     __tablename__ = 'target'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     mission_id: Mapped[int]= mapped_column(ForeignKey('mission.id'))
+    mission: Mapped[Mission] = relationship()
+    
     name: Mapped[String] = mapped_column(String)
     country: Mapped[String] = mapped_column(String)
     notes : Mapped[String] = mapped_column(String(1024), default="")
