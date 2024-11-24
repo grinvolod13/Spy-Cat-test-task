@@ -11,7 +11,10 @@ class Base(DeclarativeBase):
 class Cat(Base):
     __tablename__ = 'cat'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    
+    
     mission: Mapped[list['Mission']] = relationship(back_populates='cat')
+    
     
 
 
