@@ -17,26 +17,17 @@ def get_all(db: DB):
 
 @router.get('/{id}', response_model=Cat)
 def get_single(id: int, db: DB):
-    try:
-        return CatController(db).get(id)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=e.args[0])
+    return CatController(db).get(id)
+
         
 
 @router.delete('/{id}')
 def fire_cat(id: int, db: DB):
-    try:
-        CatController(db).remove(id)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=e.args[0])
+    CatController(db).remove(id)
 
 @router.put('/{id}/')
 def update_salary(id: int, salary: Salary, db: DB):
-    try:
-        CatController(db).set_salary(id, salary)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=e.args[0])
-    
+    CatController(db).set_salary(id, salary)
 
 @router.post('/')
 async def add_cat(cat: Cat, db: DB):
