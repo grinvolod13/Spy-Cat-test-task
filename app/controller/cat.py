@@ -2,6 +2,7 @@
 from app.model.models import Cat
 from app.model.validation import Cat as CatPydantic, Salary
 from sqlalchemy.orm import Session
+from app.exceptions import *
 
 class CatController:
     def __init__(self, db: Session) -> None:
@@ -13,7 +14,7 @@ class CatController:
     def get(self, id):
         cat = self.db.query(Cat).filter(Cat.id==id).one_or_none()
         if not cat:
-            raise ValueError(f"Cat with id: {id} does not exists")
+            raise ResourseNotFoundException(f"Cat with id: {id} does not exists")
     
     def create(self, cat_: CatPydantic):
         cat = Cat(**cat_.model_dump())
@@ -23,7 +24,7 @@ class CatController:
     def remove(self, id: int):
         cat = self.db.query(Cat).filter(Cat.id==id).one_or_none()
         if not cat:
-            raise ValueError(f"Cat with id: {id} does not exists")
+            raise ResourseNotFoundException(f"Cat with id: {id} does not exists")
         self.db.delete(cat)
         self.db.commit()
 

@@ -1,13 +1,13 @@
 from app.model.models import Cat, Mission, Target
 from app.model.validation import Cat as CatPydantic, Targets as TargetsPydantic
 from sqlalchemy.orm import Session
+from app.exceptions import *
+
 
 class MissionController:
     def __init__(self, db: Session) -> None:
         self.db = db
         
-
-    
     def create(self, targets_: TargetsPydantic):
         with self.db.begin_nested() as db:
             mission = Mission()
@@ -25,7 +25,7 @@ class MissionController:
     def get(self, id):
         mission = self.db.query(Mission).filter(Mission.id==id).one_or_none()
         if not mission:
-            raise ValueError(f"Mission with id: {id} does not exists")
+            raise ResourseNotFoundException(f"Mission with id: {id} does not exists")
         return mission
     
     

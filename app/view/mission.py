@@ -15,10 +15,7 @@ def get_all(db: DB):
 
 @router.get('/{id}', response_model=MissionResponse)
 def get_single(id: int, db: DB):
-    try:
-        return MissionController(db).get(id)
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=e.args[0])
+    return MissionController(db).get(id)
 
 @router.delete('/{id}')
 def remove_mission(id: int, db: DB):
