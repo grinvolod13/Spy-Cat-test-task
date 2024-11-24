@@ -2,7 +2,7 @@ from sqlalchemy.types import String
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column, DeclarativeBase
 from typing import Optional
-from app.session import engine
+from app.dependency import engine
 
 
 class Base(DeclarativeBase):
@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 class Cat(Base):
     __tablename__ = 'cat'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    mission: Mapped[Optional['Mission']] = relationship(back_populates='cat')
+    mission: Mapped[list['Mission']] = relationship(back_populates='cat')
     
 
 
