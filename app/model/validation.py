@@ -27,9 +27,12 @@ Salary = Annotated[float, Ge(0)]
 
 class Cat(BaseModel):
     name: str
-    years_of_expirience: Annotated[float, Ge(0)] # i belive number like 1.5 yrs should be valid in CVs
+    years_of_experience: Annotated[float, Ge(0)] # i belive number like 1.5 yrs should be valid in CVs
     breed: str
     salary: Salary
+    mission: list
+    class Config:
+        from_attributes = True
 
 import aiohttp
 
@@ -44,6 +47,7 @@ async def get_breeds_set()-> set[str]:
 # external from pydantic validation, because validation model shouldn't be IO bounded 
 async def validate_breed(cat: Cat) -> bool:
     breeds = await get_breeds_set()
-    return (cat.breed.lower() in breeds)
+    cat.breed = cat.breed.lower()
+    return (cat.breed in breeds)
     
     
