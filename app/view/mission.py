@@ -19,16 +19,20 @@ def get_single(id: int, db: DB):
 
 @router.delete('/{id}')
 def remove_mission(id: int, db: DB):
-    ...
+    MissionController(db).remove(id)
+    return {'status': 'OK'}
 
 @router.put('/{id}/{cat_id}')
 def assign_cat(id: int, cat_id: int, db: DB):
-    ...
+    MissionController(db).assign_cat(id, cat_id)
+    return {'status': 'OK'}
     
 @router.put('/{id}')
 def update_targets(id: int, targets: UpdatedTargets, db: DB):
-    ...
+    MissionController(db).update_info(id, targets)
+    return {'status': 'OK'}
 
 @router.post('/')
 def new_mission(targets: Targets, db: DB):
     MissionController(db).create(targets)
+    return {'status': 'OK'}

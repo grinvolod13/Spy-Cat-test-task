@@ -15,6 +15,7 @@ class CatController:
         cat = self.db.query(Cat).filter(Cat.id==id).one_or_none()
         if not cat:
             raise ResourseNotFoundException(f"Cat with id: {id} does not exists")
+        return cat
     
     def create(self, cat_: CatPydantic):
         cat = Cat(**cat_.model_dump())

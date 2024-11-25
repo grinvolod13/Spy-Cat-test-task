@@ -1,3 +1,3 @@
 from .models import Cat, Mission, Target
 from .validation import Targets, UpdatedTargets
-from .validation import Salary, Cat, Mission as MissionResponse
+from .validation import Salary, Cat, Mission as MissionResponse, CatResponse
