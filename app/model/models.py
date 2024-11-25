@@ -31,17 +31,16 @@ class Mission(Base):
     cat_id: Mapped[int] = mapped_column(ForeignKey('cat.id'), nullable=True)
     cat: Mapped[Optional[Cat]] = relationship(back_populates='mission')
         
-    targets: Mapped[list['Target']] = relationship(back_populates='mission')
+    targets: Mapped[list['Target']] = relationship(back_populates='mission', cascade='all')
     complete: Mapped[bool] = mapped_column(default=False)
 
 class Target(Base):
     __tablename__ = 'target'
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    mission_id: Mapped[int]= mapped_column(ForeignKey('mission.id'))
+    mission_id: Mapped[int]= mapped_column(ForeignKey('mission.id'), primary_key=True)
     mission: Mapped[Mission] = relationship(back_populates='targets')
     
-    name: Mapped[String] = mapped_column(String)
-    country: Mapped[String] = mapped_column(String)
+    name: Mapped[String] = mapped_column(String, primary_key=True)
+    country: Mapped[String] = mapped_column(String, primary_key=True)
     notes : Mapped[String] = mapped_column(String(1024), default="")
     complete: Mapped[bool] = mapped_column(default=False)
     

@@ -34,7 +34,7 @@ Salary = Annotated[float, Ge(0)]
 
 
 class Cat(BaseModel):
-    model_config = ConfigDict(extra='allow', from_attributes = True)
+    model_config = ConfigDict(from_attributes = True)
     name: str
     years_of_experience: Annotated[float, Ge(0)] # i belive number like 1.5 yrs should be valid in CVs
     breed: str

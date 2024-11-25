@@ -1,5 +1,6 @@
+from sqlalchemy import literal
 from app.model.models import Cat, Mission, Target
-from app.model.validation import Cat as CatPydantic, Targets as TargetsPydantic
+from app.model.validation import Cat as CatPydantic, Targets as TargetsPydantic, UpdatedTargets
 from sqlalchemy.orm import Session
 from app.exceptions import *
 
@@ -49,6 +50,52 @@ class MissionController:
         
         mission.cat_id = cat.id
         self.db.commit()
+    
+    def remove(self, id: int):
+        mission = self.__get_mission(id)
+        if mission.cat:
+            raise OperationNotAllowedException("Can't cancel mission, it's started!")
+        self.db.delete(mission)
+        self.db.commit()
+    
+    def update_info(self, id: int, targets_: UpdatedTargets):
+        mission = self.__get_mission(id)
+        if mission.complete:
+            raise OperationNotAllowedException("Mission completed, can't update!")
+        if mission.cat is None:
+            raise OperationNotAllowedException(
+                "Dear Unknown Cat, ask HR to assign you first please!"
+                ) # only assigned missions can have updating targets
+        for upd in targets_.root:
+            target = self.db.query(Target).filter(
+                Target.mission_id==id,
+                Target.country==upd.country,
+                Target.name==upd.name,
+            ).one_or_none()
+            if not target:
+                raise ResourseNotFoundException(
+                    "This target does not exist for this mission."
+                )
+            if target.complete:
+                raise OperationNotAllowedException(
+                    "Updating notes of complete targets are not allowed."
+                )
+            target.notes = upd.notes
+            target.complete = upd.complete
+        
+        self.db.flush()
+        exists_not_completed = self.db.query(literal(True)).filter(self.db.query(Target).filter(
+            Target.mission_id==id,
+            Target.complete==False,
+            ).exists()).scalar()
+        if not exists_not_completed:
+            mission.complete = True
+        self.db.commit()
+        
+                
+            
+            
+        
         
         
         
