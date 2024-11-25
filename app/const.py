@@ -1,0 +1,1 @@
+CAT_BREED_API = "https://api.thecatapi.com/v1/breeds"
