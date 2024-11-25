@@ -1,5 +1,5 @@
 from fastapi import Depends
-from pydantic import BaseModel, RootModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, RootModel, Field, field_validator
 from pydantic import Field
 from annotated_types import Len, Ge
 from typing import List, Annotated, Optional
@@ -18,8 +18,8 @@ class UpdatedTarget(BaseModel):
     
 class Mission(BaseModel):
     id: int
-    cat: Optional['Cat']
-    targets: 'UpdatedTargets' = Field(default_factory=list)
+    cat: Optional['CatResponse']
+    targets: 'UpdatedTargets'
     complete: bool
 
 
@@ -34,13 +34,17 @@ Salary = Annotated[float, Ge(0)]
 
 
 class Cat(BaseModel):
+    model_config = ConfigDict(extra='allow', from_attributes = True)
     name: str
     years_of_experience: Annotated[float, Ge(0)] # i belive number like 1.5 yrs should be valid in CVs
     breed: str
     salary: Salary
-    mission: list
-    class Config:
-        from_attributes = True
+    
+class CatResponse(Cat):
+    id: int
+    
+        
+    
 
 import aiohttp
 

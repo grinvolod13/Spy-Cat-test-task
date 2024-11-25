@@ -19,7 +19,7 @@ class Cat(Base):
     mission: Mapped[list['Mission']] = relationship(back_populates='cat')
     
     # without data validation yet, we assume endpoint's validation is correct.
-    # we may add later ValueError in validation, and handle in fastapi
+    # we may later raise custom exceptions in validation, and handle in fastapi
     
     
 

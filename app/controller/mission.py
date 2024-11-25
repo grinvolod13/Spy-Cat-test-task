@@ -17,31 +17,38 @@ class MissionController:
             self.db.add_all(targets)
             self.db.commit()
         
-    
-    def get_all(self):
-        return self.db.query(Mission).all()
-    
-    
-    def get(self, id):
+    def __get_cat(self, id: int)-> Cat:
+        cat = self.db.query(Cat).filter(Cat.id==id).one_or_none()
+        if not cat:
+            raise ResourseNotFoundException(f"Cat with id: {id} does not exists")
+        return cat
+        
+        
+    def __get_mission(self, id: int)-> Mission:
         mission = self.db.query(Mission).filter(Mission.id==id).one_or_none()
         if not mission:
             raise ResourseNotFoundException(f"Mission with id: {id} does not exists")
         return mission
     
+    def get_all(self):
+        return self.db.query(Mission).all()
     
+    def get(self, id):
+        mission = self.__get_mission(id)
+        return mission
     
-    # def remove(self, id: int):
-    #     cat = self.db.query(Cat).filter(Cat.id==id).one_or_none()
-    #     if not cat:
-    #         raise ValueError(f"Cat with id: {id} does not exists")
-    #     self.db.delete(cat)
-    #     self.db.commit()
-
+    def assign_cat(self, id: int, cat_id: int):
+        mission = self.__get_mission(id)
+        cat = self.__get_cat(cat_id)
+        
+        if mission.cat:
+            raise OperationNotAllowedException(f"This mission (id: {mission.id}) already have assigned Spy-Cat!")
+        active_missions = self.db.query(Mission).filter(Mission.complete==False, Mission.cat_id==cat_id).one_or_none()
+        if active_missions:
+            raise OperationNotAllowedException(f"This cat (id: {cat.id}) already have mission, use another Spy-Cat!")
+        
+        mission.cat_id = cat.id
+        self.db.commit()
         
         
-    # def set_salary(self, id: int, salary: Salary):
-    #     count = self.db.query(Cat).filter(Cat.id==id).update({Cat.salary: salary})
-    #     self.db.commit()
-    #     if not count:
-    #         raise ValueError(f"Cat with id: {id} does not exists")
         

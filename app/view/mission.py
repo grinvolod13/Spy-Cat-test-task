@@ -23,7 +23,8 @@ def remove_mission(id: int, db: DB):
 
 @router.put('/{id}/{cat_id}')
 def assign_cat(id: int, cat_id: int, db: DB):
-    ...
+    MissionController(db).assign_cat(id, cat_id)
+    return {'status': 'OK'}
     
 @router.put('/{id}')
 def update_targets(id: int, targets: UpdatedTargets, db: DB):
@@ -32,3 +33,4 @@ def update_targets(id: int, targets: UpdatedTargets, db: DB):
 @router.post('/')
 def new_mission(targets: Targets, db: DB):
     MissionController(db).create(targets)
+    return {'status': 'OK'}
